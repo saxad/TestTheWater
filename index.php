@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-//$_SESSION["isonline"] = false ;
+$_SESSION["isonline"] = false ;
 if(isset($_SESSION["isonline"]) && $_SESSION["isonline"] == true){
   header("location:./log.php");
   exit;
@@ -62,6 +62,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css">
     <title>test page</title>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
   </head>
   <body>
 
@@ -79,7 +80,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
 
     <label for="Password">Password</label>
     <input type="password" name="Password" value=""placeholder="Password">
-
+    <div class="g-recaptcha" data-sitekey="6LcVcYsUAAAAAB9kTrReVBfV8Lw6uw2wIX9YsRTb"></div>
     <button type="submit" name="button">Envoyer</button>
 
     <label >
