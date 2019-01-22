@@ -39,8 +39,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
     $stmt->execute( array(':email' => $username , ':password'=> $password  ));
     $loged = $stmt->fetchAll();
     var_dump($loged[0]["email"]);
-    if(sizeof($loged) != 1){
-        echo "une erreur est survenue lors de l'execution de la requete";
+
+    $secret = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
+    $reponse = $_POST["g-recaptcha-response"];
+    $remoteIP = $_SERVER["REMOTE_ADDR"];
+
+    $url =  "https://www.google.com/recaptcha/api/siteverify?secret="
+
+        . $secret
+
+        . "&response=" . $reponse
+
+        . "&remoteip=" . $remoteIP ;
+
+    	$decode = json_decode(file_get_contents($url), true);
+      var_dump($decode);
+
+
+    if(sizeof($loged) != 1 || $decode['success'] != true){
+        echo "la val de loged" .$loged;
+        echo "<br>la val de reca" .$decode['success'];
+        echo "<br>une erreur est survenue lors de l'execution de la requete";
     }
     else{
       session_start();
@@ -62,7 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css">
     <title>test page</title>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js?hl=fr'></script>
   </head>
   <body>
 
@@ -80,8 +99,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
 
     <label for="Password">Password</label>
     <input type="password" name="Password" value=""placeholder="Password">
-    <div class="g-recaptcha" data-sitekey="6LcVcYsUAAAAAB9kTrReVBfV8Lw6uw2wIX9YsRTb"></div>
-    <button type="submit" name="button">Envoyer</button>
+    <div class="g-recaptcha" data-theme="dark" data-callback="sub" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+    <button type="submit" name="button" disabled>Envoyer</button>
 
     <label >
       <input type="checkbox" name="remember" value="">
@@ -91,7 +110,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
   </div>
 
   <div class="container">
-    <button type="button" name="button" class="csl">Cancel</button>
+    <button type="button" name="button" class="csl" >Cancel</button>
     <span class="pwd">Frogot<a href="#">Password</a> </span>
 
   </div>
@@ -99,4 +118,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST" ){
 </form>
 
   </body>
+  <script type="text/javascript">
+    function sub() {
+      alert("cc");
+          document.getElementsByTagName("button")[0].removeAttribute('disabled');
+
+    }
+  </script>
 </html>
